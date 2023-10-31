@@ -1,6 +1,6 @@
 # GildedRose
 
-# Getting Started
+## Getting Started
 
 1. Install .NET 7
 2. Clone the repo.
