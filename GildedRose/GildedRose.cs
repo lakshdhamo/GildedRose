@@ -8,6 +8,7 @@ public class GildedRose
     private readonly int? _maxQuality;
     private ItemCategory _itemCategory = ItemCategory.NormalItem;
     private int _qualityFactor = Constants.DefaultQualityDegradeFactor;
+    private delegate int CalculateQuality(Item item);
 
     /// <summary>
     /// Initialize the default values
@@ -61,32 +62,20 @@ public class GildedRose
     private int GetQuality(Item item)
     {
         int result;
-        switch (_itemCategory)
+        CalculateQuality calculateQuality = _itemCategory switch
         {
-            case ItemCategory.AgedItem:                                         // Will always increase
-                result = ++item.Quality;
-                break;
-            case ItemCategory.LegendaryItem:                                    // Never alters
-                result = item.Quality;
-                break;
-            case ItemCategory.ConcertItem:                                      // Value changes based on the SellIn value
-                if (item.SellIn < 0)
-                    result = 0;
-                else if (item.SellIn <= 5)
-                    result = item.Quality + 3;
-                else if (item.SellIn <= 10)
-                    result = item.Quality + 2;
-                else
-                    result = ++item.Quality;
-                break;
-            case ItemCategory.ConjuredItem:                                     // Degrades twice as fast as normal
-                result = item.Quality - (2 * _qualityFactor);
-                break;
-            default:                                                            // Default degrade per day
-                result = item.Quality - (1 * _qualityFactor);
-                break;
-        }
-
+            // Will always increase
+            ItemCategory.AgedItem => AgedItemQuality,
+            // Never alters
+            ItemCategory.LegendaryItem => LegendaryItemQuality,
+            // Value changes based on the SellIn value
+            ItemCategory.ConcertItem => ConcertItemQuality,
+            // Degrades twice as fast as normal
+            ItemCategory.ConjuredItem => ConjuredItemQuality,
+            // Default degrade per day
+            _ => NormalItemQuality,
+        };
+        result = calculateQuality(item);
         return NormalizeQuality(result);
     }
 
@@ -107,6 +96,65 @@ public class GildedRose
         return result;
     }
 
+    #region Calculate Quality
+    /// <summary>
+    /// Calculate quality for Aged items
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private int AgedItemQuality(Item item)
+    {
+        return ++item.Quality;
+    }
+    
+    /// <summary>
+    /// Calculate quality for Legendary items
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private int LegendaryItemQuality(Item item)
+    {
+        return item.Quality;
+    }
+    
+    /// <summary>
+    /// Calculate quality for Concert items
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private int ConcertItemQuality(Item item)
+    {
+        if (item.SellIn < 0)
+            return 0;
+        else if (item.SellIn <= 5)
+            return item.Quality + 3;
+        else if (item.SellIn <= 10)
+            return item.Quality + 2;
+        else
+            return ++item.Quality;
+    }
+    
+    /// <summary>
+    /// Calculate quality for Conjured items
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private int ConjuredItemQuality(Item item)
+    {
+        return item.Quality - (2 * _qualityFactor);
+    }
+    
+    /// <summary>
+    /// Calculate quality for Normal items
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private int NormalItemQuality(Item item)
+    {
+        return item.Quality - (1 * _qualityFactor);
+    }
+    #endregion
+    
     /// <summary>
     /// Perform prerequisite operation for every items. This will be used to perform business logic later
     /// </summary>
