@@ -64,15 +64,10 @@ public class GildedRose
         int result;
         CalculateQuality calculateQuality = _itemCategory switch
         {
-            // Will always increase
             ItemCategory.AgedItem => AgedItemQuality,
-            // Never alters
             ItemCategory.LegendaryItem => LegendaryItemQuality,
-            // Value changes based on the SellIn value
             ItemCategory.ConcertItem => ConcertItemQuality,
-            // Degrades twice as fast as normal
             ItemCategory.ConjuredItem => ConjuredItemQuality,
-            // Default degrade per day
             _ => NormalItemQuality,
         };
         result = calculateQuality(item);
@@ -98,7 +93,7 @@ public class GildedRose
 
     #region Calculate Quality
     /// <summary>
-    /// Calculate quality for Aged items
+    /// Calculate quality for Aged items - Will always increase
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -108,7 +103,7 @@ public class GildedRose
     }
     
     /// <summary>
-    /// Calculate quality for Legendary items
+    /// Calculate quality for Legendary items - Never alters
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -118,7 +113,7 @@ public class GildedRose
     }
     
     /// <summary>
-    /// Calculate quality for Concert items
+    /// Calculate quality for Concert items - Value changes based on the SellIn value
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -135,7 +130,7 @@ public class GildedRose
     }
     
     /// <summary>
-    /// Calculate quality for Conjured items
+    /// Calculate quality for Conjured items - Degrades twice as fast as normal
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -145,7 +140,7 @@ public class GildedRose
     }
     
     /// <summary>
-    /// Calculate quality for Normal items
+    /// Calculate quality for Normal items - Default degrade per day
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
