@@ -114,18 +114,17 @@ public class GildedRose
     private void Prerequisite(Item item)
     {
         string itemName = item.Name.Trim();
+        
         // Assign ItemCategory
-        if (itemName == Constants.AgedBrie)
-            _itemCategory = ItemCategory.AgedItem;
-        else if (itemName == Constants.Sulfuras)
-            _itemCategory = ItemCategory.LegendaryItem;
-        else if (itemName == Constants.Backstage)
-            _itemCategory = ItemCategory.ConcertItem;
-        else if (itemName == Constants.Conjured)
-            _itemCategory = ItemCategory.ConjuredItem;
-        else
-            _itemCategory = ItemCategory.NormalItem;
-
+        _itemCategory = itemName switch
+        {
+            Constants.AgedBrie => ItemCategory.AgedItem,
+            Constants.Sulfuras => ItemCategory.LegendaryItem,
+            Constants.Backstage => ItemCategory.ConcertItem,
+            Constants.Conjured => ItemCategory.ConjuredItem,
+            _ => ItemCategory.NormalItem,
+        };
+    
         // Set Quality subtract factor
         _qualityFactor = item.SellIn > 0 ? 1 : 2;
     }
