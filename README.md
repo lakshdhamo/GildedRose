@@ -14,6 +14,7 @@ Though it addresses the functionality, the code can be optimized.
 ## Solution
 Optimized the code using method mentioned approaches
 * Code Metrics - Restructred the class and no method contains the "Cyclomatic Complexity" score more than 10 (Old is 19), lowest maintainability index of 66 (Old is 45)
+* Strategy pattern - Implemented strategy pattern to calculate Quality. Used delegates to apply strategy.
 * foreach -  Iterate over the collection and process item by item
 * Hard-Coded - Removed the hard-coded values and moved those to a class called Constants
 * Enum - Item categories are moved to Enum for better comparision and arrest possible errors
